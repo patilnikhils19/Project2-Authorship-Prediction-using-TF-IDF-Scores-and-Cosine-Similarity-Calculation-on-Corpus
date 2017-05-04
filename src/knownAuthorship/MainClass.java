@@ -14,6 +14,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 
 
+
 	/**
 	 * @author Nikhil Patil <patilnikhils19@gmail.com>
 	 * Apr 6, 2017
@@ -95,6 +96,21 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					FileInputFormat.setInputPaths(job3, new Path(OUT_PATH3));
 					FileOutputFormat.setOutputPath(job3, new Path(OUT_PATH4));
 					if (job3.waitForCompletion(true)) System.out.println("Job Four Completed");
+					
+				//Word-Idf
+					Job job4=Job.getInstance(conf);
+					job4.setJarByClass(MainClass.class);
+					job4.setMapperClass(WordIdfMap.class);
+					job4.setReducerClass(WordIdfRed.class);
+					job4.setOutputKeyClass(Text.class);
+					job4.setOutputValueClass(Text.class);
+					job4.setInputFormatClass(TextInputFormat.class);
+					job4.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job4, new Path(OUT_PATH4));
+					FileOutputFormat.setOutputPath(job4, new Path(args[1]));
+					if (job4.waitForCompletion(true)) System.out.println("Job Five Completed"); 
+					System.exit(job4.waitForCompletion(true) ? 0 : 1);
+
 
 			}
 }
