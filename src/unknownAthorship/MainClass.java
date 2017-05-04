@@ -12,7 +12,6 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-
 	/**
 	 * @author Nikhil Patil <patilnikhils19@gmail.com>
 	 * Apr 6, 2017
@@ -73,7 +72,20 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					FileInputFormat.setInputPaths(job2, new Path(args[1]));  //WordIdf File
 					FileOutputFormat.setOutputPath(job2, new Path(OUT_PATH3)); // Unknown Full Dimension
 					if (job2.waitForCompletion(true)) System.out.println("Job Three Completed");
+					
+				//cosine Calculation job Will Start Here
+					Job job3=Job.getInstance(conf);
+					job3.setJarByClass(MainClass.class);
+					job3.setMapperClass(CosineMap.class);
+					job3.setReducerClass(CosineRed.class);
+					job3.setOutputKeyClass(Text.class);
+					job3.setOutputValueClass(Text.class);
+					job3.setInputFormatClass(TextInputFormat.class);
+					job3.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job3, new Path(args[2])); //Known TFIDF file
+					FileOutputFormat.setOutputPath(job3, new Path(OUT_PATH4)); //Cosine Output
+					if (job3.waitForCompletion(true)) System.out.println("Job four Completed ");
 				
-					System.exit(job2.waitForCompletion(true) ? 0 : 1);
+					System.exit(job3.waitForCompletion(true) ? 0 : 1);
 			}
 }
