@@ -68,6 +68,18 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					System.out.println("Author Total is"+authorTotal);
 					conf.set("N",String.valueOf(authorTotal));
 					
+				//Idf Calculation job Will Start Here
+					Job job2=Job.getInstance(conf);
+					job2.setJarByClass(MainClass.class);
+					job2.setMapperClass(WordMapperIdf.class);
+					job2.setReducerClass(WordReducerIdf.class);
+					job2.setOutputKeyClass(Text.class);
+					job2.setOutputValueClass(Text.class);
+					job2.setInputFormatClass(TextInputFormat.class);
+					job2.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job2, new Path(OUT_PATH2));
+					FileOutputFormat.setOutputPath(job2, new Path(OUT_PATH3));
+					if (job2.waitForCompletion(true)) System.out.println("Job Three Completed");
 
 			}
 }
