@@ -12,6 +12,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+
 	/**
 	 * @author Nikhil Patil <patilnikhils19@gmail.com>
 	 * Apr 6, 2017
@@ -86,6 +87,20 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					FileOutputFormat.setOutputPath(job3, new Path(OUT_PATH4)); //Cosine Output
 					if (job3.waitForCompletion(true)) System.out.println("Job four Completed ");
 				
-					System.exit(job3.waitForCompletion(true) ? 0 : 1);
+				//Top 10 Author Possibilities Detection for unknown text
+				Job job4=Job.getInstance(conf);
+					job4.setJarByClass(MainClass.class);
+					job4.setMapperClass(Word10Map.class);
+					job4.setCombinerClass(Word10Combiner.class);
+					job4.setCombinerClass(Word10Reducer.class);
+					job4.setOutputKeyClass(Text.class);
+					job4.setOutputValueClass(Text.class);
+					job4.setInputFormatClass(TextInputFormat.class);
+					job4.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job4, new Path(OUT_PATH4)); //cosine Output
+					FileOutputFormat.setOutputPath(job4, new Path(args[3])); //OUTPUT prediction of top 10
+					if (job4.waitForCompletion(true)) System.out.println("Job five Completed Ha Ha Ha ");
+				
+					System.exit(job4.waitForCompletion(true) ? 0 : 1);
 			}
 }
