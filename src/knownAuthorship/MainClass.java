@@ -11,6 +11,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+
 	/**
 	 * @author Nikhil Patil <patilnikhils19@gmail.com>
 	 * Apr 6, 2017
@@ -47,6 +48,25 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					FileInputFormat.setInputPaths(job, new Path(args[0]));
 					FileOutputFormat.setOutputPath(job, new Path(OUT_PATH1));
 					if (job.waitForCompletion(true)) System.out.println("Job One Completed");
+					
+				//Tf Calculation job Will Start Here
+					Job job1=Job.getInstance(conf);
+					job1.setJarByClass(MainClass.class);
+					job1.setMapperClass(WordMapperTf.class);
+					job1.setReducerClass(WordReducerTf.class);
+					job1.setOutputKeyClass(Text.class);
+					job1.setOutputValueClass(Text.class);
+					job1.setInputFormatClass(TextInputFormat.class);
+					job1.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job1, new Path(OUT_PATH1));
+					FileOutputFormat.setOutputPath(job1, new Path(OUT_PATH2));
+					if (job1.waitForCompletion(true)) System.out.println("Job Two Completed");
+					
+					Counters counters=job1.getCounters();
+					Counter counter =counters.findCounter(knownAuthorship.WordReducerTf.TestCounters.TEST);
+					long authorTotal=counter.getValue();	
+					System.out.println("Author Total is"+authorTotal);
+					conf.set("N",String.valueOf(authorTotal));
 					
 
 			}
