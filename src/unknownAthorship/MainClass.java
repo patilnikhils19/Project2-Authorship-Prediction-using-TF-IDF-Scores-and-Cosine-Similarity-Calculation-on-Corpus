@@ -45,7 +45,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					job.setOutputFormatClass(TextOutputFormat.class);
 					FileInputFormat.setInputPaths(job, new Path(args[0])); // Unknown Author File
 					FileOutputFormat.setOutputPath(job, new Path(OUT_PATH1));
-					if (job.waitForCompletion(true)) System.out.println("Job One Completed Ha Ha Ha ");
+					if (job.waitForCompletion(true)) System.out.println("Job One Completed ");
 					
 					//Tf Calculation job Will Start Here
 					Job job1=Job.getInstance(conf);
@@ -58,9 +58,22 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					job1.setOutputFormatClass(TextOutputFormat.class);
 					FileInputFormat.setInputPaths(job1, new Path(OUT_PATH1));
 					FileOutputFormat.setOutputPath(job1, new Path(OUT_PATH2)); // Unknown Word Tf
-					if (job1.waitForCompletion(true)) System.out.println("Job Two Completed Ha Ha Ha ");
+					if (job1.waitForCompletion(true)) System.out.println("Job Two Completed");
 					
+					
+				//Tf.Idf Calculation job Will Start Here
+					Job job2=Job.getInstance(conf);
+					job2.setJarByClass(MainClass.class);
+					job2.setMapperClass(UnknownMapper.class);
+					job2.setReducerClass(UnknownReducer.class);
+					job2.setOutputKeyClass(Text.class);
+					job2.setOutputValueClass(Text.class);
+					job2.setInputFormatClass(TextInputFormat.class);
+					job2.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job2, new Path(args[1]));  //WordIdf File
+					FileOutputFormat.setOutputPath(job2, new Path(OUT_PATH3)); // Unknown Full Dimension
+					if (job2.waitForCompletion(true)) System.out.println("Job Three Completed");
 				
-					System.exit(job1.waitForCompletion(true) ? 0 : 1);
+					System.exit(job2.waitForCompletion(true) ? 0 : 1);
 			}
 }
