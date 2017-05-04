@@ -12,6 +12,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 
+
+
 	/**
 	 * @author Nikhil Patil <patilnikhils19@gmail.com>
 	 * Apr 6, 2017
@@ -80,6 +82,19 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 					FileInputFormat.setInputPaths(job2, new Path(OUT_PATH2));
 					FileOutputFormat.setOutputPath(job2, new Path(OUT_PATH3));
 					if (job2.waitForCompletion(true)) System.out.println("Job Three Completed");
+					
+				//VectorAttribute Calculation job Will Start Here
+					Job job3=Job.getInstance(conf);
+					job3.setJarByClass(MainClass.class);
+					job3.setMapperClass(WordMapperTfIdf.class);
+					job3.setReducerClass(WordReducerTfIdf.class);
+					job3.setOutputKeyClass(Text.class);
+					job3.setOutputValueClass(Text.class);
+					job3.setInputFormatClass(TextInputFormat.class);
+					job3.setOutputFormatClass(TextOutputFormat.class);
+					FileInputFormat.setInputPaths(job3, new Path(OUT_PATH3));
+					FileOutputFormat.setOutputPath(job3, new Path(OUT_PATH4));
+					if (job3.waitForCompletion(true)) System.out.println("Job Four Completed");
 
 			}
 }
